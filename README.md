@@ -1,0 +1,123 @@
+# Proyek Akhir: Menyelesaikan Permasalahan Perusahaan Edutech
+
+## Business Understanding
+Jaya Jaya Institut adalah institusi pendidikan tinggi yang telah beroperasi sejak tahun 2000 dan telah membangun reputasi yang kuat dalam menghasilkan lulusan berkualitas. Namun, institusi ini menghadapi tantangan signifikan berupa tingginya angka mahasiswa yang tidak menyelesaikan pendidikan (dropout), yang dapat berdampak negatif pada reputasi dan pendapatan institusi. Untuk mengatasi hal ini, institusi tersebut berupaya mengembangkan sistem deteksi dini berbasis data untuk mengidentifikasi mahasiswa yang berisiko dropout, sehingga dapat memberikan bimbingan khusus sebelum mereka benar-benar mengambil keputusan untuk berhenti.
+
+Dengan begitu, pada proyek ini akan membuat sebuah dashboard untuk membantu Jaya Jaya Institut serta model Machine Learning agar bisa mempredikisi siswa yang akan mungkin melakukan dropout.
+
+### Permasalahan Bisnis
+Permasalahan bisnis utama yang perlu diselesaikan adalah tingginya tingkat dropout mahasiswa di Jaya Jaya Institut yang dapat mempengaruhi reputasi dan pendapatan institusi. Untuk mengatasi hal ini, institusi membutuhkan sistem deteksi dini berbasis machine learning yang dapat memprediksi dan mengidentifikasi mahasiswa yang berisiko dropout berdasarkan analisis data performa siswa. Model machine learning dapat membantu menganalisis pola-pola dari data historis untuk menghasilkan prediksi yang akurat. Selain itu, institusi juga memerlukan dashboard yang dapat memudahkan pemantauan dan pemahaman terhadap data performa siswa, sehingga pihak manajemen dapat mengambil tindakan preventif yang tepat dengan memberikan bimbingan khusus kepada mahasiswa yang teridentifikasi berisiko dropout berdasarkan hasil prediksi model.
+
+### Cakupan Proyek
+Cakupan proyek yang akan dikerjakan disini adalah pengembangan suatu dashboard untuk serta pembuatan model machine learning untuk memprediksi siswa yang mungkin akan keluar atau dropout.
+
+### Persiapan
+
+Sumber data: https://github.com/dicodingacademy/dicoding_dataset/blob/main/students_performance
+
+Setup environment:
+```
+conda create -n sbm_meta python=3.10
+conda activate sbm_meta
+pip install -r requirements.txt
+```
+
+
+## Machine Learning
+
+### Data Preparation
+- Dataset yang digunakan memiliki 37 kolom dan total data 4424.
+- Dataset ini tidak memiliki data kosong maupun data yang terduplikasi, dapat disimpulkan data ini bersih.
+- Selanjutnya, melakukan encoding pada kolom `Status` menjadi `StatusEncoded` supaya machine learning dapat berkerja dengan baik, aturan encoding sebagai berikut:
+    - `Dropout` akan diubah menjadi `0`
+    - `Graduate` akan diubah menjadi `1`
+    - `Enrolled` akan diubah menjadi `3`
+- Selanjutnya, melakukan normalisasi menggunakan `MinMaxScaler` pada data selain `Status` dan `StatusEncoded`.
+- Selanjutnya, memilih siswa yang hanya keluar dari sekolah atau `Dropout` sama dengan `0.
+- Dan yang terakhir membagi dataset sebesar 20% untuk data uji dan 80% untuk data latih
+
+### Modeling
+- **Logistic Regression**: Model klasifikasi linear dengan maksimum 1000 iterasi dan random state 99. Model ini bekerja dengan mencari hubungan linear antara fitur input dan probabilitas kelas output, cocok untuk klasifikasi biner dan multiclass dengan komputasi yang relatif ringan.
+- **K-Nearest Neighbors**: Model yang mengklasifikasikan data berdasarkan mayoritas kelas dari k tetangga terdekat. Menggunakan parameter default yang berarti k=5 dan metric jarak Euclidean, cocok untuk dataset dengan pola lokal yang kuat.
+- **Support Vector Machine**: Model yang bekerja dengan mencari hyperplane optimal untuk memisahkan kelas-kelas data. Menggunakan random state 99 untuk konsistensi, cocok untuk data dengan dimensi tinggi dan dapat menangani klasifikasi non-linear melalui kernel trick.
+- **Decision Tree**: Model berbasis pohon keputusan dengan random state 44. Bekerja dengan membagi data berdasarkan fitur-fitur yang paling informatif, menghasilkan model yang mudah diinterpretasi namun rentan terhadap overfitting.
+- **Random Forest**: Ensemble model yang terdiri dari 100 pohon keputusan dengan random state 88. Menggabungkan prediksi dari banyak pohon keputusan untuk menghasilkan prediksi yang lebih stabil dan akurat.
+- **Gradient Boosting**: Model ensemble yang membangun pohon keputusan secara sekuensial dengan random state 99. Setiap pohon baru berfokus pada memperbaiki kesalahan prediksi dari pohon-pohon sebelumnya.
+- **Naive Bayes**: Implementasi Multinomial Naive Bayes yang cocok untuk klasifikasi teks. Menggunakan teorema Bayes dengan asumsi independensi antar fitur, efisien untuk dataset dengan dimensi tinggi.
+- **Multi-Layer Perceptron**: Neural network sederhana dengan maksimum 1000 iterasi dan random state 99. Mampu mempelajari pola non-linear yang kompleks melalui multiple hidden layers.
+- **AdaBoost**: Model ensemble yang meningkatkan performa dengan memberikan bobot lebih pada data yang salah klasifikasi. Menggunakan random state 99 untuk reproduktifitas hasil.
+- **Linear Discriminant Analysis**: Teknik klasifikasi yang mengasumsikan distribusi normal dan varians yang sama antar kelas. Bekerja dengan mereduksi dimensi sambil memaksimalkan separabilitas antar kelas.
+- **Quadratic Discriminant Analysis**: Variasi dari LDA yang mengasumsikan setiap kelas memiliki matriks kovarians yang berbeda. Lebih fleksibel dari LDA namun memerlukan lebih banyak data.
+- **Extra Trees**: Model ensemble mirip Random Forest namun dengan pemilihan split yang lebih acak. Menggunakan random state 99, biasanya menghasilkan model yang lebih cepat training-nya dibanding Random Forest.
+- **Stochastic Gradient Descent**: Implementasi berbagai loss functions dengan optimisasi gradient descent stokastik. Menggunakan random state 99, efisien untuk dataset besar dengan update parameter per sampel.
+- **Bagging Classifier**: Model ensemble yang melatih beberapa base classifier pada subset data yang berbeda. Menggunakan random state 99, efektif untuk mengurangi overfitting dan variance.
+
+### Evaluation
+Evaluasi disini akan menggunakan metrik Accuracy dan Confusion Matrix.
+Berikut ini grafik evaluasi untuk setiap model:
+![](https://i.imgur.com/iXoyIs5.png)
+
+Evaluasi setiap model sebagai berikut:
+- **Logistic Regression** (Akurasi: 76,2%)
+Kelebihan: Menunjukkan performa yang seimbang dengan True Positive (211) dan True Negative (414) yang kuat. Tingkat False Positive relatif rendah (47), menunjukkan presisi yang baik dalam prediksi positif.
+Kekurangan: Meskipun tingkat False Negative rendah (8), masih ada ruang untuk peningkatan dalam mengidentifikasi semua kasus positif dengan benar.
+- **K-Nearest Neighbors** (Akurasi: 66,8%)
+Kelebihan: Mempertahankan tingkat True Positive (186) dan True Negative (375) yang cukup baik meskipun akurasi keseluruhan lebih rendah.
+Kekurangan: Tingkat False Positive (74) dan False Negative (44) lebih tinggi dibandingkan model lain, menunjukkan kinerja yang kurang optimal untuk dataset ini.
+- **Support Vector Machine** (Akurasi: 74,0%)
+Kelebihan: Tingkat True Negative sangat baik (429) dan False Negative sangat rendah (4), menunjukkan kemampuan kuat dalam mengidentifikasi kasus negatif.
+Kekurangan: Tingkat False Positive (58) masih bisa ditingkatkan untuk meningkatkan akurasi prediksi secara keseluruhan.
+- **Decision Tree** (Akurasi: 67,9%)
+Kelebihan: Keseimbangan yang baik antara True Positive (197) dan False Positive yang relatif rendah (38).
+Kekurangan: Tingkat False Negative lebih tinggi (33) dan True Negative lebih rendah (346) dibandingkan model lain, menunjukkan kemungkinan underfitting.
+- **Random Forest** (Akurasi: 77,6%)
+Kelebihan: Akurasi terbaik secara keseluruhan dengan tingkat True Positive (212) dan True Negative (420) yang kuat, menunjukkan keseimbangan yang sangat baik.
+Kekurangan: Masih memiliki beberapa False Positive (46) dan False Negative (11), meskipun relatif rendah dibandingkan model lain.
+- **Gradient Boosting** (Akurasi: 76,9%)
+Kelebihan: Memiliki tingkat True Positive (210) dan True Negative (410) yang kuat dengan False Positive yang rendah (40).
+Kekurangan: Tingkat False Negative (9) relatif rendah namun masih bisa ditingkatkan untuk performa yang lebih baik.
+- **Naive Bayes** (Akurasi: 65,8%)
+Kelebihan: Tingkat True Negative cukup baik (401) meskipun akurasi keseluruhan lebih rendah.
+Kekurangan: Tingkat False Positive tertinggi (106) dan False Negative yang signifikan (42), menunjukkan kinerja klasifikasi yang kurang baik secara keseluruhan.
+- **Multi-Layer Perceptron** (Akurasi: 72,8%)
+Kelebihan: Keseimbangan yang baik antara True Positive (201) dan tingkat False Positive yang rendah (37).
+Kekurangan: Tingkat True Negative lebih rendah (381) dibandingkan model dengan performa terbaik.
+- **AdaBoost** (Akurasi: 75,5%)
+Kelebihan: Tingkat True Positive (220) dan True Negative (410) yang kuat, menunjukkan keseimbangan yang baik secara keseluruhan.
+Kekurangan: Tingkat False Positive (47) dan False Negative (14) masih bisa dioptimalkan untuk performa yang lebih baik.
+- **Linear Discriminant Analysis** (Akurasi: 74,0%)
+Kelebihan: Tingkat False Negative sangat rendah (0) dan True Negative yang kuat (409), menunjukkan identifikasi kasus negatif yang sangat baik.
+Kekurangan: Tingkat False Positive (49) masih mempengaruhi kinerja keseluruhan.
+- **Quadratic Discriminant Analysis** (Akurasi: 68,9%)
+Kelebihan: Tingkat True Positive yang baik (187) dan True Negative yang cukup (380).
+Kekurangan: Tingkat False Negative lebih tinggi (33) dan False Positive (57) yang masih perlu diperbaiki.
+- **Extra Trees** (Akurasi: 77,4%)
+Kelebihan: Kinerja keseluruhan yang kuat dengan tingkat True Positive (211) dan True Negative (422) yang tinggi.
+Kekurangan: Masih menunjukkan beberapa False Positive (47) dan False Negative (9), meskipun relatif rendah.
+- **Stochastic Gradient Descent** (Akurasi: 74,7%)
+Kelebihan: Tingkat True Positive sangat baik (223) dan True Negative yang kuat (435).
+Kekurangan: Tingkat False Positive yang masih cukup tinggi (62) dan False Negative (11) mempengaruhi presisi keseluruhan.
+- **Bagging Classifier** (Akurasi: 74,5%)
+Kelebihan: Tingkat True Positive yang baik (213) dan False Positive yang relatif rendah (41).
+Kekurangan: Tingkat False Negative (20) dan True Negative (392) masih bisa ditingkatkan untuk performa yang lebih optimal.
+
+Kesimpulan: Secara keseluruhan, Random Forest menunjukkan performa terbaik dengan akurasi 77,6% dan keseimbangan yang baik antara semua metrik dan oleh sebab itu Random Forest dipilih.
+
+
+## Business Dashboard
+Jelaskan tentang business dashboard yang telah dibuat. Jika ada, sertakan juga link untuk mengakses dashboard tersebut.
+
+## Menjalankan Sistem Machine Learning
+Jelaskan cara menjalankan protoype sistem machine learning yang telah dibuat. Selain itu, sertakan juga link untuk mengakses prototype tersebut.
+
+```
+
+```
+
+## Conclusion
+Jelaskan konklusi dari proyek yang dikerjakan.
+
+### Rekomendasi Action Items
+Berikan beberapa rekomendasi action items yang harus dilakukan perusahaan guna menyelesaikan permasalahan atau mencapai target mereka.
+- action item 1
+- action item 2
