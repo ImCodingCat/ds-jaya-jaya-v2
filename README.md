@@ -1,4 +1,4 @@
-# Proyek Akhir: Menyelesaikan Permasalahan Perusahaan Edutech
+# Proyek Akhir: Menyelesaikan Permasalahan Perusahaan Edutech - mdavap
 
 ## Business Understanding
 Jaya Jaya Institut adalah institusi pendidikan tinggi yang telah beroperasi sejak tahun 2000 dan telah membangun reputasi yang kuat dalam menghasilkan lulusan berkualitas. Namun, institusi ini menghadapi tantangan signifikan berupa tingginya angka mahasiswa yang tidak menyelesaikan pendidikan (dropout), yang dapat berdampak negatif pada reputasi dan pendapatan institusi. Untuk mengatasi hal ini, institusi tersebut berupaya mengembangkan sistem deteksi dini berbasis data untuk mengidentifikasi mahasiswa yang berisiko dropout, sehingga dapat memberikan bimbingan khusus sebelum mereka benar-benar mengambil keputusan untuk berhenti.
@@ -21,7 +21,10 @@ conda create -n sbm_meta python=3.10
 conda activate sbm_meta
 pip install -r requirements.txt
 ```
-
+Running notebook:
+```
+jupyter .
+```
 
 ## Machine Learning
 
@@ -31,7 +34,7 @@ pip install -r requirements.txt
 - Selanjutnya, melakukan encoding pada kolom `Status` menjadi `StatusEncoded` supaya machine learning dapat berkerja dengan baik, aturan encoding sebagai berikut:
     - `Dropout` akan diubah menjadi `0`
     - `Graduate` akan diubah menjadi `1`
-    - `Enrolled` akan diubah menjadi `3`
+    - `Enrolled` akan diubah menjadi `2`
 - Selanjutnya, melakukan normalisasi menggunakan `MinMaxScaler` pada data selain `Status` dan `StatusEncoded`.
 - Selanjutnya, memilih siswa yang hanya keluar dari sekolah atau `Dropout` sama dengan `0.
 - Dan yang terakhir membagi dataset sebesar 20% untuk data uji dan 80% untuk data latih
@@ -105,19 +108,74 @@ Kesimpulan: Secara keseluruhan, Random Forest menunjukkan performa terbaik denga
 
 
 ## Business Dashboard
-Jelaskan tentang business dashboard yang telah dibuat. Jika ada, sertakan juga link untuk mengakses dashboard tersebut.
+Dashboard terdiri dari 3 bagian yaitu:
+1. Top Section - Key Perfomance Indicators
+    - Total Students (Number), Jumlah siswa.
+    - Total Enrolled Students (Number), Jumlah siswa yang masuk.
+    - Total Graduated Students (Number), Jumlah siswa yang telah lulus.
+    - Total Dropout Students (Number), Jumlah siswa yang keluar.
+    - Dropout Rate (Number), Keseluruhan presentase dari siswa yang keluar.
+    - Avarage Grade at First Semester (Number), Rata-rata nilai dari siswa disemester satu.
+    - Avarage Grade at Second Semester (Number), Rata-rata nilai dari siswa disemester dua.
+2. Middle Section - Student Characteristics and Student Perfomances
+    - Student Characteristics
+        - Student Nationality (World Map), Peta dunia yang menunjukan dari mana saja siswa berasal.
+        - Student Courses (Pie Chart), Grafik yang menunjukan mata pelajaran yang siswa ambil.
+        - Previous Student Qualification (Pie Chart), Grafik yang menunjukan kualifikasi apa saja sebelum siswa masuk dalam institut ini.
+        - Student Martial Status (Pie Chart), Grafik yang menunjukan status pernikahan dari siswa-siswa.
+        - Student Parent Education (Pie Chart), Grafik yang menunjukan pendidikan terakhir dari siswa-siswa.
+        - Student Attendance Time (Pie Chart), Grafik yang menunjukan pada waktu apa siswa menghadiri pembelajaran.
+    - Student Perfomances
+        - Avarage Student Perfomance on First Semester (Row Chart), Grafik yang menunjukan rata-rata performa atau nilai pada siswa-siswa disemester satu.
+        - Avarage Student Perfomance on Second Semester (Row Chart), Grafik yang menunjukan rata-rata performa atau nilai pada siswa-siswa disemester dua.
+3. Bottom Section - Student Dropout Characteristics
+    - Top 10 Courses with Highest Dropout count (Row Chart), Grafik yang menunjukan 10 mata pembelajaran teratas dengan jumlah putus sekolah.
+    - Total Dropout by Student Gender (Bar Chart), Grafik yang menunjukan berapa banyak siswa keluar dengan perbandingan jenis kelamin mereka.
+    - Total Dropout by Student Debtor (Pie Chart), Grafik yang menunjukan berapa banyak siswa keluar dengan perbandingan kepemilikan hutang mereka.
+    - Total Dropout by Student Scholarship Holder (Pie Chart), Grafik yang menunjukan berapa banyak siswa keluar dengan perbandingan kepemilikan beasiswa.
+    - Total Dropout by Student has Tuition Fees Up To Date (Pie Chart), Grafik yang menunjukan berapa banyak siswa keluar dengan perbandingan berapa dari mereka yang harus melunasi pembayaran.
+
+[Link Dashboard](https://ds-meta.getani.me/public/dashboard/0dde6513-bb4c-4485-ac66-18a09e9d2dd3)
+dan Berikut username dan password untuk metabase
+```
+root@mail.com
+root123
+```
 
 ## Menjalankan Sistem Machine Learning
-Jelaskan cara menjalankan protoype sistem machine learning yang telah dibuat. Selain itu, sertakan juga link untuk mengakses prototype tersebut.
-
+Cara untuk menjalankan sistem machine learning sebagai berikut:
 ```
-
+streamlit run app.py
 ```
+[Klik disini untuk membuka versi cloud yang sudah siap](https://ds-jaya-jaya-v2-fwsgwjnwyqzfd7r427mppu.streamlit.app/)
 
 ## Conclusion
-Jelaskan konklusi dari proyek yang dikerjakan.
+- Kesimpulan:
+    - Solusi mengatasi siswa dropout ada dua pendekatan yaitu:
+        1. Pembuatan dashboard yang berguna untuk memonitor yang mungkin menjadi faktor siswa drop out.
+        2. Menggunakan model machine learning yaitu dengan algoritma Random Forest dengan akurasi 77.6% dan seiring jalannya waktu model machine learning dapat ditingkatkan dari faktor-faktor yang baru serta data yang lebih banyak.
+    - Penyebab siswa drop out
+        1. Kebanyakan dari mereka memiliki faktor ekonomi yang kurang memadai dan ini penyebab utama kenapa mereka keluar.
+        2. Kebanyakan dari mereka menghadiri pembelajaran pada sore atau malam hari dan ini menjadi penyebab kedua.
+        3. Perkerjaan orang tua juga menjadi penyebab ketiga yaitu orang tua yang tidak memiliki pendidikan yang bagus menjadikan siswa-siswa tidak melihat kesuksesan dari orang tua mereka maka mereka tidak memiliki sifat optimis.
+        4. Kebanyakan dari mereka mengambil jurusan Management dan Nursing.
+    - Karakteristik dari Siswa yang keluar
+        1. Siswa yang kurang mampu dalam finansial.
+        2. Menghadiri pembelajaran pada waktu sore atau malam.
+        3. Orang tua siswa tidak memiliki jenjang pendidikan yang mumpuni.
+        4. Berasal dari jurusan Managemen, Nursing dan Jurnalism and communication.
+        5. Kebanyakan dari mereka belum menikah atau lanjang. 
+
 
 ### Rekomendasi Action Items
-Berikan beberapa rekomendasi action items yang harus dilakukan perusahaan guna menyelesaikan permasalahan atau mencapai target mereka.
-- action item 1
-- action item 2
+Berikut rekomendasi action items:
+- Program Bimbingan Akademik yang Ditingkatkan
+    - Institusi perlu memperkuat program bimbingan akademik dengan pendekatan yang lebih personal dan terstruktur. Dosen pembimbing akademik harus dibekali dengan akses ke dashboard monitoring mahasiswa yang memungkinkan mereka melacak perkembangan akademik secara real-time. Pertemuan bimbingan wajib harus dijadwalkan secara regular, terutama untuk mahasiswa yang teridentifikasi berisiko tinggi.
+- Dukungan Finansial yang Lebih Fleksibel
+    - Faktor ekonomi berperan signifikan dalam keputusan dropout, institusi perlu mengembangkan program dukungan finansial yang lebih fleksibel seperti pinjaman siswa, pembayaran berkala atau beasiswa bagi siswa yang memiliki potensi yang bagus.
+- Komunikasi
+    - Adanya komunikasi dapat lebih memahami apa saja kesulitan siswa yang dihadapi entah itu finansial, program belajar dan sebagainya.
+- Reward
+    - Adanya reward sistem akan mengurangi persentase siswa yang keluar karena reward sistem akan menumbuhkan rasa semangat mereka untuk mencapai tujuan.
+- Pengukuran dan Evaluasi Program
+    - Perlu adanya evaluasi program belajar siswa, seperti `apakah diakhir pembelajar A siswa mendapatkan nilai bagus?` jika tidak, evaluasi sangat membantu apa saja kekurangan program belajar tersebut.
